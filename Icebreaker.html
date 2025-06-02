@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classroom Icebreaker Generator</title>
+  <style>
+    body {
+      font-family: Roboto, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: auto;
+      padding: 40px;
+      max-width: 600px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      text-decoration: underline;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    #prompt {
+      font-size: 20px;
+      margin: 30px 0;
+      padding: 20px;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      background-color: #fff;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007acc;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005a99;
+    }
+  </style>
+</head>
+<body>
+
+  🏠︎ <a href="index.html" class="back-button">Back to Home</a>
+
+  <h1>Classroom Icebreaker Generator</h1>
+
+  <div id="prompt">Click the button to get an icebreaker prompt!</div>
+
+  <button onclick="showRandomPrompt()">New Icebreaker</button>
+
+  <script>
+const prompts = [
+  "If you could have any superpower, what would it be and why?",
+  "What’s your go-to snack after a long day?",
+  "What’s a talent or skill you have that not many people know about?",
+  "If you had to eat one food for the rest of your life, what would it be?",
+  "What’s the last thing that made you laugh really hard?",
+  "If you could travel anywhere in the world, where would you go?",
+  "What’s your dream job or career—even if it’s a little out there?",
+  "If your life were a movie, what would the title be?",
+  "Would you rather fight one horse-sized duck or 100 duck-sized horses?",
+  "What’s a song you could listen to on repeat?",
+  "If you could time travel, would you go to the past or the future?",
+  "What’s your favorite holiday tradition?",
+  "If you were an animal, what would you be and why?",
+  "Describe your perfect weekend.",
+  "What’s a small thing that instantly makes your day better?",
+  "If you could swap places with any person for a day, who would it be?",
+  "What’s the best book or movie you’ve experienced recently?",
+  "What’s your favorite app or game right now?",
+  "What’s a goal you’re working on this year?",
+  "What’s your favorite way to relax after school?",
+  "If your backpack had a theme song, what would it be?",
+  "Would you rather live in a treehouse or a spaceship?",
+  "If you were invisible for a day, what would you do?",
+  "What’s your favorite childhood memory?",
+  "What’s something you’re proud of yourself for recently?",
+  "If your mood today were a weather forecast, what would it be?",
+  "What’s one thing you’re looking forward to this week?",
+  "Which fictional world would you love to visit?",
+  "What’s your favorite quote or saying?",
+  "If your name had to be a color, what would it look like?",
+  "What’s a food you can’t stand that everyone else seems to love?",
+  "What’s your favorite season and why?",
+  "Would you rather go without music or without TV for a year?",
+  "What’s one rule you’d add to or remove from school?",
+  "If you had a pet dragon, what would you name it?",
+  "What’s your favorite way to spend time with friends?",
+  "If you had a personal robot, what would you make it do?",
+  "What’s something you’re curious about right now?",
+  "What’s a job you’d never want to have?",
+  "What’s your favorite way to be creative?",
+  "What’s your biggest pet peeve?",
+  "If you could make any school subject disappear, which one and why?",
+  "Who inspires you and why?",
+  "Would you rather be able to fly or breathe underwater?",
+  "What’s your favorite thing about mornings?",
+  "If you could design your own class, what would it be about?",
+  "What emoji best describes your personality?",
+  "What’s your favorite kind of weather?",
+  "If you opened a store, what would you sell?",
+  "What’s one thing you want people to remember about you?"
+];
+
+    function showRandomPrompt() {
+      const randomIndex = Math.floor(Math.random() * prompts.length);
+      document.getElementById("prompt").innerText = prompts[randomIndex];
+    }
+  </script>
+
+</body>
+</html>
