@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Daily Teacher Boost</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin: auto;
+    }
+
+    .back-button {
+      text-decoration: underline;
+      color: #333;
+      font-size: 1rem;
+      display: inline-block;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    }
+
+    select, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin: 1rem 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .message {
+      font-size: 1.3rem;
+      font-style: italic;
+      margin: 1.5rem 0;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    🏠︎ <a href="index.html" class="back-button">Back to Home</a>
+
+    <h1>Daily Teacher Boost</h1>
+    <label for="mood">How are you feeling today?</label><br />
+    <select id="mood">
+      <option value="">--Select your mood--</option>
+      <option value="tired">Tired</option>
+      <option value="frustrated">Frustrated</option>
+      <option value="inspired">Inspired</option>
+      <option value="overwhelmed">Overwhelmed</option>
+      <option value="hopeful">Hopeful</option>
+      <option value="discouraged">Discouraged</option>
+      <option value="burnedOut">Burned Out</option>
+      <option value="confident">Confident</option>
+      <option value="stretchedThin">Stretched Thin</option>
+      <option value="proud">Proud</option>
+
+    </select>
+    <br />
+    <button onclick="showBoost()">Give Me a Boost</button>
+
+    <div class="message" id="boost"></div>
+  </div>
+
+  <script>
+const boosts = {
+  tired: [
+    "You’re not just tired. You’ve been giving your all.",
+    "Your effort matters, even when your energy is low.",
+    "Some days surviving is a huge win. This is one of them.",
+    "You’re showing up when it would be easier not to. That’s strength.",
+    "Take a breath. You’re allowed to pause without quitting.",
+    "Your students don’t need perfection—they need you, just as you are.",
+    "Fatigue is a sign you’ve been fighting the good fight.",
+    "It's okay to rest. You’re not a machine, you’re a miracle in motion.",
+    "Today, being present is enough.",
+    "Keep going—but also keep resting.",
+    "You can’t pour from an empty cup. Refill yours.",
+    "You’re not alone in the tired. We’re all walking this road together."
+  ],
+  frustrated: [
+    "The hard days don’t define you—they refine you.",
+    "You can be frustrated and still be a phenomenal teacher.",
+    "That one student who got under your skin? They still need you.",
+    "Every setback is part of a bigger comeback.",
+    "Breathe. You’re doing better than it feels right now.",
+    "You can press reset at any time today.",
+    "It’s not about getting it all right. It’s about showing up with heart.",
+    "Even in your frustration, you are planting seeds.",
+    "You don’t have to have all the answers to make a difference.",
+    "Let go of perfect. Hold on to progress.",
+    "Some of your best teaching happens in the mess.",
+    "This moment will pass. Your impact won’t."
+  ],
+  inspired: [
+    "Lean into the spark—it’s what makes you magic.",
+    "Ride this wave. You’re doing something that matters.",
+    "Keep chasing the light. Your students will follow.",
+    "When your energy is high, spread it generously.",
+    "Your creativity is contagious—use it freely.",
+    "Let your ideas run wild. That’s where the gold is.",
+    "Students notice when you’re lit up. So do their minds.",
+    "Every idea you try breathes life into your classroom.",
+    "Passion is power in a teacher’s hands.",
+    "You don’t need permission to innovate—just courage.",
+    "Your fire lights the way for others.",
+    "Don’t hold back. The world needs what you’re bringing."
+  ],
+  overwhelmed: [
+    "You can do anything—just not everything at once.",
+    "The to-do list can wait. Your sanity can’t.",
+    "Prioritize peace over perfection today.",
+    "When everything feels like too much, start with one thing.",
+    "You’re not behind. You’re human.",
+    "Choose what matters most. The rest can wait.",
+    "There’s no trophy for burnout.",
+    "Even small steps are progress.",
+    "Being overwhelmed doesn’t mean you’re failing.",
+    "Say no without guilt. Say yes to what fuels you.",
+    "Grace over grind. Always.",
+    "One breath, one thing, one moment at a time."
+  ],
+  hopeful: [
+    "Hope isn’t naive—it’s brave.",
+    "Every day brings a new chance to reach a student.",
+    "Believing in better is your quiet rebellion.",
+    "Your optimism is a gift to your students.",
+    "You see potential where others see problems. That’s vision.",
+    "Keep watering the seeds. Growth is coming.",
+    "You are the hope in someone’s hard day.",
+    "The future needs more teachers like you.",
+    "Trust the process. The good is building.",
+    "You make things better just by showing up.",
+    "Hope grows louder every time you refuse to give up.",
+    "Teaching is the most hopeful act there is."
+  ],
+  discouraged: [
+    "One hard day doesn’t erase all the good ones.",
+    "You may not see the results yet, but the impact is real.",
+    "Your worth is not measured by a bad class period.",
+    "Discouragement visits, but it doesn’t get to stay.",
+    "You’re still here. That says everything.",
+    "Even on your worst day, you’re someone’s favorite teacher.",
+    "You’re not failing—you’re growing through the hard.",
+    "Every effort you make counts, even if it goes unnoticed.",
+    "Keep your head up. You're doing sacred work.",
+    "Students don’t always say thank you—but they remember.",
+    "The days you want to quit are the days you’re needed most.",
+    "This rough patch won’t last. Your calling will."
+  ],
+  burnedOut: [
+    "You’re not broken. You’re just worn out from caring deeply.",
+    "It’s okay to pull back so you can move forward later.",
+    "You’ve been giving 100% for too long. Time to refill.",
+    "Burnout isn’t failure—it’s a signal.",
+    "What you’re feeling is valid. Don’t ignore it.",
+    "You deserve rest, not guilt.",
+    "Let yourself breathe before you push again.",
+    "You’re not alone. So many feel this too.",
+    "Protecting your energy is part of doing good work.",
+    "Rest is revolutionary.",
+    "Sometimes stepping back helps you come back stronger.",
+    "Even if your fire is dim, it hasn’t gone out."
+  ],
+  confident: [
+    "You’ve got this—and you know it.",
+    "Trust your instincts. They’re built on experience.",
+    "When you walk in with purpose, students notice.",
+    "Your voice matters. Use it boldly.",
+    "You’ve worked hard for this moment. Own it.",
+    "Teaching is your superpower—use it with pride.",
+    "You’re not just prepared. You’re powerful.",
+    "What you bring to the classroom can’t be replicated.",
+    "You’ve earned every bit of your confidence.",
+    "Go ahead—shine. You’ve earned it.",
+    "Your presence changes the room. Never forget that.",
+    "You’re exactly the teacher they need."
+  ],
+  stretchedThin: [
+    "You can’t do it all—and that’s okay.",
+    "Being stretched means you’re trying. That counts.",
+    "Boundaries are brave. Set them often.",
+    "You don’t have to catch every ball. Let some drop.",
+    "You’re not weak. You’re maxed out.",
+    "Say yes to less today.",
+    "The world won’t end if you take care of yourself first.",
+    "You’re still making a difference, even when it’s messy.",
+    "Pause before you break.",
+    "Let yourself be human, not heroic.",
+    "Sometimes the best you can do is plenty.",
+    "Narrow your focus. Deep beats wide."
+  ],
+  proud: [
+    "Look at how far you’ve come—you did that.",
+    "You’ve earned every win, big and small.",
+    "Your impact runs deeper than you know.",
+    "You lit a spark that will outlast you.",
+    "Students thrive because of your dedication.",
+    "What you do matters. Today. Always.",
+    "You’re building futures. That’s no small thing.",
+    "Your hard work deserves celebration.",
+    "Be proud. You’ve made it through so much.",
+    "The ripple effect of your care is endless.",
+    "You are a difference-maker. Let that sink in.",
+    "Pride isn’t arrogance—it’s proof of your purpose."
+  ]
+};
+    function showBoost() {
+      const mood = document.getElementById("mood").value;
+      const boostBox = document.getElementById("boost");
+
+      if (!mood || !boosts[mood]) {
+        boostBox.textContent = "Please select a mood to get your boost.";
+        return;
+      }
+
+      const moodBoosts = boosts[mood];
+      const randomIndex = Math.floor(Math.random() * moodBoosts.length);
+      boostBox.textContent = moodBoosts[randomIndex];
+    }
+  </script>
+</body>
+</html>
