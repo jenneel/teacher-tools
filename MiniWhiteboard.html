@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mini Whiteboard Doodle Space</title>
+  <style>
+    body {
+      font-family: Roboto, sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+      margin: 0;
+      position: relative;
+    }
+    a.back-home {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 16px;
+      text-decoration: underline;
+      color: #007acc;
+      cursor: pointer;
+    }
+    h1 {
+      margin-top: 60px; /* Leave space for the link */
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .controls {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    label {
+      font-weight: bold;
+      color: #333;
+    }
+    canvas {
+      border: 2px solid #007acc;
+      border-radius: 8px;
+      background: white;
+      cursor: crosshair;
+    }
+    button {
+      background-color: #007acc;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+<body>
+    🏠︎ <a href="index.html" class="back-button">Back to Home</a>
+  <h1>Mini Whiteboard Doodle Space</h1>
+  <div class="controls">
+    <label for="colorPicker">Pen Color:</label>
+    <input type="color" id="colorPicker" value="#000000" />
+    <button id="clearBtn">Clear</button>
+    <button id="saveBtn">Save as Image</button>
+  </div>
+  
+  <canvas id="whiteboard" width="600" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById('whiteboard');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let penColor = document.getElementById('colorPicker').value;
+
+    document.getElementById('colorPicker').addEventListener('change', (e) => {
+      penColor = e.target.value;
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+      drawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!drawing) return;
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.strokeStyle = penColor;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      drawing = false;
+    });
+
+    canvas.addEventListener('mouseout', () => {
+      drawing = false;
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'whiteboard-doodle.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  </script>
+</body>
+</html>
