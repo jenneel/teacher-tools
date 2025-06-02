@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exit Ticket Generator</title>
+  <style>
+    body {
+      font-family: Roboto, sans-serif;
+ 	background-color: #f9f9f9;
+  	color: #333;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    select {
+      padding: 8px;
+      font-size: 16px;
+    }
+    .question {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+  .copy-btn:hover {
+background-color: #0056b3 !important; /* darker blue on hover */
+    }
+    .copied-msg {
+      color: green;
+      font-size: 14px;
+      display: none;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+🏠︎ <a href="index.html" class="back-button">Back to Home</a>
+  <h1>Exit Ticket Question Generator</h1>
+  <label for="category-select">Choose a category:</label>
+  <select id="category-select">
+    <option value="">--Select a Category--</option>
+    <option value="reflection">Reflection</option>
+    <option value="understanding">Check for Understanding</option>
+    <option value="mood">Mood Check</option>
+    <option value="application">Application</option>
+    <option value="metacognition">Metacognition</option>
+  </select>
+
+  <div id="questions-container"></div>
+
+  <script>
+    const questions = {
+      reflection: [
+        "One thing I learned today that surprised me was...",
+        "Something I struggled with today and how I handled it...",
+        "If I had to teach today’s lesson to a friend, I would start with...",
+        "One connection I made between today’s lesson and my life is...",
+        "What would I do differently if I could go through this lesson again?",
+        "Today I felt most confident when...",
+        "One mistake I made today and what I learned from it...",
+        "A skill I used today that I’m proud of...",
+        "This lesson reminded me of...",
+        "I used to think ___, but now I think ___."
+      ],
+      understanding: [
+        "Write a one-sentence summary of what we learned today.",
+        "List three key vocabulary words from today’s lesson and define them.",
+        "What is one question you still have about today’s topic?",
+        "Draw a quick diagram or visual of what we covered today.",
+        "Rate your understanding from 1–5 and explain your rating.",
+        "Explain the main idea of the lesson in your own words.",
+        "Which part of today’s lesson felt easiest? Which felt hardest?",
+        "Write your own question about today’s topic (and answer it).",
+        "Choose one concept from today and give a real-world example.",
+        "What would be on a quiz about today’s topic?"
+      ],
+      mood: [
+        "Choose an emoji to describe your mood and explain why you picked it.",
+        "Today, I felt _______ because...",
+        "On a scale from 1–10, how focused did you feel today?",
+        "What was the best part of your day (school or non-school)?",
+        "What’s one thing you’re looking forward to tomorrow?",
+        "How did today’s class make you feel? Why?",
+        "What’s one word to describe your current mindset?",
+        "Did anything in class today make you feel frustrated or proud?",
+        "How supported did you feel during this lesson?",
+        "If today were a song, what would the title be?"
+      ],
+      application: [
+        "How can you use today’s learning in real life?",
+        "Create a real-world scenario where this concept would be useful.",
+        "What advice would you give someone struggling with this topic?",
+        "Describe how this concept might show up in your future career.",
+        "Write a short script showing two people using today’s skill.",
+        "Find a connection between today’s lesson and a previous one.",
+        "Design a simple challenge or game using today’s concept.",
+        "Write a tweet (280 characters or less) summarizing today’s lesson.",
+        "If this topic showed up in a movie or show, what would the scene be?",
+        "What’s a real-world problem that could be solved using what you learned today?"
+      ],
+      metacognition: [
+        "What strategy helped you learn best today?",
+        "Did you change your thinking during the lesson? How?",
+        "How did you check your understanding as you worked?",
+        "What was your thought process for solving a tough problem?",
+        "Did anything confuse you? How did you try to work through it?",
+        "How did today’s learning build on what you already knew?",
+        "What did you do today when you didn’t understand something right away?",
+        "What questions did you ask yourself during today’s lesson?",
+        "How do you know you understood today’s topic?",
+        "What learning habit would you like to improve?"
+      ]
+    };
+
+    const categorySelect = document.getElementById('category-select');
+    const questionsContainer = document.getElementById('questions-container');
+
+    categorySelect.addEventListener('change', () => {
+      const selected = categorySelect.value;
+      questionsContainer.innerHTML = '';
+      if (questions[selected]) {
+        questions[selected].forEach(q => {
+          const div = document.createElement('div');
+          div.className = 'question';
+
+          const p = document.createElement('p');
+          p.textContent = q;
+
+          const button = document.createElement('button');
+          button.textContent = 'Copy';
+          button.className = 'copy-btn';
+          button.onclick = () => {
+            navigator.clipboard.writeText(q);
+            copiedMsg.style.display = 'inline';
+            setTimeout(() => copiedMsg.style.display = 'none', 1200);
+          };
+
+          const copiedMsg = document.createElement('span');
+          copiedMsg.className = 'copied-msg';
+          copiedMsg.textContent = 'Copied!';
+
+          div.appendChild(p);
+          div.appendChild(button);
+          div.appendChild(copiedMsg);
+
+          questionsContainer.appendChild(div);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

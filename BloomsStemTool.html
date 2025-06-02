@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bloom’s Question Stem Tool</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: auto;
+    }
+
+    select, button {
+      font-size: 16px;
+      padding: 8px 12px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+
+    select:focus, button:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    }
+
+    .copy-btn {
+ background-color: #007bff !important; /* Bootstrap’s primary blue */
+color: white !important;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+    }
+
+    .copy-btn:hover {
+background-color: #0056b3 !important; /* darker blue on hover */
+    }
+
+    #questionList {
+      margin-top: 15px;
+      padding-left: 20px;
+    }
+
+    #questionList li {
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    #copyFeedback {
+      margin-top: 10px;
+      font-weight: bold;
+      color: green;
+      min-height: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+🏠︎ <a href="index.html" class="back-button">Back to Home</a>
+<h1 style="text-align: center;">Bloom’s Question Stem Tool</h1>
+    <label for="levelSelect">Choose Bloom's Level:</label>
+    <select id="levelSelect">
+      <option value="">-- Select Level --</option>
+    </select>
+
+    <label for="verbSelect">Choose Verb:</label>
+    <select id="verbSelect" disabled>
+      <option value="">-- Select Verb --</option>
+    </select>
+
+    <button id="generateBtn">Generate Questions</button>
+
+    <ul id="questionList"></ul>
+    <div id="copyFeedback"></div>
+  </div>
+
+  <script>
+    const data = {
+      remembering: {
+         Define: [
+          "How would you define…",
+          "What is the definition of…",
+          "Can you define the term…",
+          "In your own words, define…",
+          "How is … defined?"
+        ],
+        Describe: [
+          "How would you describe…",
+          "What are the characteristics of…",
+          "Can you describe the process of…",
+          "Describe what happens when…",
+          "What does … look like?"
+        ],
+        Identify: [
+          "Can you identify…",
+          "Which one shows…",
+          "How can you identify…",
+          "What clues help you identify…",
+          "Where can you identify examples of…"
+        ],
+        Label: [
+          "Can you label the parts of…",
+          "Where would you place a label on…",
+          "How would you label each part of…",
+          "Label the diagram of…",
+          "Label the following with the correct terms:"
+        ],
+        List: [
+          "Can you list the steps of…",
+          "List the main ideas of…",
+          "What would you list as…",
+          "How many items can you list in…",
+          "List all the parts of…"
+        ],
+        Match: [
+          "Can you match the term with its meaning…",
+          "Match each item to its description…",
+          "How would you match these two sets…",
+          "Match the following examples to the correct category…",
+          "Which matches with…"
+        ],
+        Name: [
+          "Can you name the…",
+          "What is the name of…",
+          "Name the part that…",
+          "Who can name all the…",
+          "How many can you name that…"
+        ],
+        Recall: [
+          "What do you recall about…",
+          "Can you recall the facts about…",
+          "Recall the steps used to…",
+          "How much can you recall about…",
+          "Recall the main points from…"
+        ],
+        Recognize: [
+          "Can you recognize this example of…",
+          "Recognize the pattern in…",
+          "How do you recognize when…",
+          "Which of these can you recognize as…",
+          "Recognize the difference between…"
+        ],
+        Select: [
+          "Which option would you select for…",
+          "Select the correct answer from…",
+          "How do you select the right…",
+          "What would you select to match…",
+          "Select the example that shows…"
+        ]
+      },
+      understanding: {
+        Classify: [
+          "How would you classify…",
+          "Can you classify these into groups based on…",
+          "Classify the items according to…",
+          "Which category does … belong to?",
+          "What is the best way to organize or classify…"
+        ],
+        Compare: [
+          "How does … compare to …?",
+          "Can you compare … and …?",
+          "What are the similarities and differences between…?",
+          "Which is more …, and why?",
+          "Compare the features of … and …"
+        ],
+        Describe: [
+          "How would you describe the meaning of…",
+          "Describe the relationship between…",
+          "Can you describe how … works?",
+          "What does … tell you about…?",
+          "Describe what happens when…"
+        ],
+        Discuss: [
+          "How would you discuss the idea of…",
+          "Can you discuss the importance of…",
+          "What are some points you would include in a discussion of…?",
+          "Discuss what might happen if…",
+          "What perspectives could be discussed about…"
+        ],
+        Explain: [
+          "How would you explain…",
+          "Explain why … happens",
+          "Can you explain the purpose of…",
+          "What is the explanation for…",
+          "Explain how … and … are related"
+        ],
+        Interpret: [
+          "How would you interpret the message of…",
+          "Interpret the meaning of…",
+          "What does … represent?",
+          "Can you interpret the data shown in…?",
+          "Interpret what this means in your own words"
+        ],
+        Paraphrase: [
+          "Can you paraphrase this idea in simpler terms?",
+          "How would you restate … in your own words?",
+          "Paraphrase what the author is saying in…",
+          "What is another way to say…?",
+          "Paraphrase this definition using everyday language"
+        ],
+        Predict: [
+          "What do you predict will happen if…?",
+          "Can you make a prediction based on…?",
+          "Predict the outcome of…",
+          "Based on the data, what might happen next?",
+          "What might be the result of…?"
+        ],
+        Summarize: [
+          "How would you summarize the main idea of…?",
+          "Can you give a brief summary of…?",
+          "Summarize what happened in…",
+          "What is the key takeaway from…?",
+          "Summarize the process used to…"
+        ],
+        Translate: [
+          "Can you translate this idea into simpler language?",
+          "Translate the information from a chart into words.",
+          "How would you translate this into a visual format?",
+          "Translate this equation into a word problem.",
+          "How can you translate this story into your own words?"
+        ]
+      },
+      applying: {
+        Calculate: [
+          "Can you calculate the value of…?",
+          "Calculate the total for…",
+          "How would you calculate…?",
+          "Calculate the result of…",
+          "What is the calculated answer for…?"
+        ],
+        Demonstrate: [
+          "Can you demonstrate how to…?",
+          "Demonstrate the steps to…",
+          "How would you demonstrate the use of…?",
+          "Show how you would demonstrate…",
+          "Demonstrate the process of…"
+        ],
+        Execute: [
+          "Can you execute the procedure for…?",
+          "Execute the steps needed to…",
+          "How would you execute this task?",
+          "What is the best way to execute…?",
+          "Execute the following instructions to…"
+        ],
+        Illustrate: [
+          "Can you illustrate how to…?",
+          "Illustrate the concept of…",
+          "How would you illustrate the process of…?",
+          "Illustrate your answer with an example",
+          "Show an illustration that explains…"
+        ],
+        Implement: [
+          "How would you implement the method for…?",
+          "Can you implement the plan to…?",
+          "What steps are needed to implement…?",
+          "Implement a solution for…",
+          "Describe how you would implement…"
+        ],
+        Interpret: [
+          "Can you interpret the results of…?",
+          "Interpret what this data shows when you apply it to…",
+          "How would you interpret the meaning of… in this context?",
+          "Interpret the outcome of your application of…",
+          "What does this tell you when you interpret it practically?"
+        ],
+        Operate: [
+          "Can you operate the equipment to…?",
+          "How do you operate the tool for…?",
+          "Demonstrate how to operate…",
+          "What are the steps to operate…?",
+          "Operate the system to achieve…"
+        ],
+        Perform: [
+          "Can you perform the task of…?",
+          "Perform the following procedure…",
+          "How would you perform the operation of…?",
+          "Perform the actions needed to…",
+          "What steps do you follow to perform…?"
+        ],
+        Use: [
+          "How would you use this information to…?",
+          "Can you use the formula to solve…?",
+          "Use the data to answer the question…",
+          "How do you use this tool to…?",
+          "Use an example to show how…"
+        ],
+        Solve: [
+          "Can you solve the problem of…?",
+          "Solve the equation for…",
+          "What steps do you take to solve…?",
+          "How would you solve this type of problem?",
+          "Solve the following using what you have learned…"
+        ]
+      },
+      analyzing: {
+        Analyze: [
+          "Can you analyze the components of…?",
+          "Analyze the relationship between…",
+          "What can you infer by analyzing…?",
+          "How would you analyze the information in…?",
+          "Analyze the data to find patterns in…"
+        ],
+        Categorize: [
+          "Can you categorize these items based on…?",
+          "Categorize the following according to…",
+          "What criteria would you use to categorize…?",
+          "How would you categorize the information in…?",
+          "Categorize the examples into groups based on…"
+        ],
+        Compare: [
+          "How would you compare these two ideas?",
+          "Compare and contrast the features of…",
+          "What differences do you notice when you compare…?",
+          "Can you compare the effectiveness of…?",
+          "Compare the advantages and disadvantages of…"
+        ],
+        Contrast: [
+          "Can you contrast the two concepts of…?",
+          "What are the key contrasts between…?",
+          "Contrast the methods used in…",
+          "How do these two examples contrast with each other?",
+          "Contrast the outcomes of…"
+        ],
+        Differentiate: [
+          "How would you differentiate between…?",
+          "Can you differentiate the types of…?",
+          "What distinguishes one from the other in…?",
+          "Differentiate the causes of…",
+          "Differentiate the effects of…"
+        ],
+        Distinguish: [
+          "Can you distinguish the main idea from the details in…?",
+          "Distinguish between fact and opinion in…",
+          "How would you distinguish the characteristics of…?",
+          "Distinguish the features of these examples…",
+          "What helps you distinguish one from the other in…?"
+        ],
+        Examine: [
+          "Examine the evidence for…",
+          "Can you examine the causes of…?",
+          "What do you notice when you examine…?",
+          "Examine the argument presented in…",
+          "How would you examine the components of…?"
+        ],
+        Infer: [
+          "What can you infer from this data?",
+          "Can you infer the meaning of…?",
+          "Infer the cause of…",
+          "What conclusions can you infer from…?",
+          "Infer what might happen next based on…"
+        ],
+        Organize: [
+          "Can you organize these ideas into categories?",
+          "Organize the steps in the correct order for…",
+          "How would you organize the information in…?",
+          "Organize the data to make it easier to understand",
+          "Organize the arguments for and against…"
+        ],
+        Question: [
+          "What questions would you ask about…?",
+          "Can you question the validity of…?",
+          "Question the assumptions made in…",
+          "What questions arise when examining…?",
+          "How would you question the reasoning behind…?"
+        ]
+      },
+      evaluating: {
+        Assess: [
+          "How would you assess the effectiveness of…?",
+          "Can you assess the strengths and weaknesses of…?",
+          "Assess the impact of…",
+          "What criteria would you use to assess…?",
+          "Assess the validity of the argument in…"
+        ],
+        Choose: [
+          "Which option would you choose for…?",
+          "Choose the best solution for…",
+          "Why would you choose this method over another?",
+          "Choose the most appropriate example of…",
+          "On what basis would you choose between these options?"
+        ],
+        Compare: [
+          "Compare the value of these two approaches",
+          "How do you compare the results of…?",
+          "Compare the advantages and disadvantages of…",
+          "Compare and evaluate the effectiveness of…",
+          "What differences influence your comparison of…?"
+        ],
+        Conclude: [
+          "What conclusion can you draw from…?",
+          "Can you conclude which is better based on…?",
+          "Conclude the implications of…",
+          "How do you conclude the outcome of…?",
+          "What evidence supports your conclusion about…?"
+        ],
+        Critique: [
+          "Can you critique the reasoning behind…?",
+          "Critique the author's argument in…",
+          "What are the flaws in…?",
+          "Critique the effectiveness of…",
+          "How would you critique the process used in…?"
+        ],
+        Decide: [
+          "How would you decide the best course of action for…?",
+          "Decide which method is most effective for…",
+          "On what basis would you decide between…?",
+          "Decide the priority of these factors in…",
+          "What factors influence your decision about…?"
+        ],
+        Judge: [
+          "Judge the quality of the solution to…",
+          "Can you judge the accuracy of…?",
+          "Judge the reliability of the data in…",
+          "What criteria do you use to judge…?",
+          "Judge the success of the strategy used in…"
+        ],
+        Justify: [
+          "Can you justify your choice of…?",
+          "Justify the reasons for…",
+          "How would you justify the use of…?",
+          "Justify your answer with evidence from…",
+          "What evidence supports your justification for…?"
+        ],
+        Support: [
+          "How would you support the argument that…?",
+          "Support your opinion with facts about…",
+          "Can you support the conclusion with data?",
+          "Support your decision using examples from…",
+          "What evidence do you have to support…?"
+        ],
+        Validate: [
+          "How would you validate the results of…?",
+          "Can you validate the effectiveness of…?",
+          "Validate the accuracy of the information in…",
+          "What steps are needed to validate the claim about…?",
+          "Validate your findings with examples from…"
+        ]
+      },
+      creating: {
+        Assemble: [
+          "Can you assemble the parts to make…?",
+          "How would you assemble the steps to complete…?",
+          "Assemble a model that demonstrates…",
+          "What would you assemble to show…?",
+          "Assemble the elements needed for…"
+        ],
+        Build: [
+          "Build a structure that represents…",
+          "How would you build a solution for…?",
+          "Build a diagram to explain…",
+          "What would you build to illustrate…?",
+          "Build a plan to solve the problem of…"
+        ],
+        Compose: [
+          "Compose a story about…",
+          "Can you compose a summary of…?",
+          "Compose a poem that expresses…",
+          "How would you compose a report on…?",
+          "Compose an argument supporting…"
+        ],
+        Construct: [
+          "Construct a graph to display…",
+          "How would you construct an experiment to test…?",
+          "Construct a model to explain…",
+          "What would you construct to demonstrate…?",
+          "Construct a plan to improve…"
+        ],
+        Create: [
+          "Create a presentation about…",
+          "Can you create a new way to…?",
+          "Create a product that solves…",
+          "How would you create a solution for…?",
+          "Create an original design for…"
+        ],
+        Design: [
+          "Design an experiment to investigate…",
+          "How would you design a building that…?",
+          "Design a plan to increase…",
+          "What would you design to improve…?",
+          "Design a graphic to represent…"
+        ],
+        Develop: [
+          "Develop a proposal for…",
+          "Can you develop a new method for…?",
+          "Develop a strategy to address…",
+          "How would you develop a system to…?",
+          "Develop a model that explains…"
+        ],
+        Formulate: [
+          "Formulate a hypothesis about…",
+          "How would you formulate a plan to…?",
+          "Formulate questions to guide…",
+          "Can you formulate an equation for…?",
+          "Formulate a strategy to solve…"
+        ],
+        Plan: [
+          "Plan a project that involves…",
+          "How would you plan an investigation into…?",
+          "Plan the steps needed to…",
+          "Can you plan a way to improve…?",
+          "Plan a schedule for completing…"
+        ],
+        Produce: [
+          "Produce a report on…",
+          "Can you produce a video explaining…?",
+          "Produce a piece of work that shows…",
+          "How would you produce a demonstration of…?",
+          "Produce a diagram to illustrate…"
+
+        ]
+      }
+    };
+
+    const levelSelect = document.getElementById("levelSelect");
+    const verbSelect = document.getElementById("verbSelect");
+    const generateBtn = document.getElementById("generateBtn");
+    const questionList = document.getElementById("questionList");
+    const copyFeedback = document.getElementById("copyFeedback");
+
+    Object.keys(data).forEach(level => {
+      const option = document.createElement("option");
+      option.value = level;
+      option.textContent = level.charAt(0).toUpperCase() + level.slice(1);
+      levelSelect.appendChild(option);
+    });
+
+    levelSelect.addEventListener("change", () => {
+      const selectedLevel = levelSelect.value;
+      verbSelect.innerHTML = '<option value="">-- Select Verb --</option>';
+      verbSelect.disabled = !selectedLevel;
+
+      if (selectedLevel) {
+        Object.keys(data[selectedLevel]).forEach(verb => {
+          const option = document.createElement("option");
+          option.value = verb;
+          option.textContent = verb.charAt(0).toUpperCase() + verb.slice(1);
+          verbSelect.appendChild(option);
+        });
+      }
+    });
+
+    generateBtn.addEventListener("click", () => {
+      const level = levelSelect.value;
+      const verb = verbSelect.value;
+      questionList.innerHTML = "";
+
+      if (level && verb && data[level] && data[level][verb]) {
+        data[level][verb].forEach(question => {
+          const li = document.createElement("li");
+          li.textContent = question;
+          questionList.appendChild(li);
+        });
+      } else {
+        alert("Please select both a Bloom’s level and a verb.");
+      }
+    });
+
+generateBtn.addEventListener("click", () => {
+  const level = levelSelect.value;
+  const verb = verbSelect.value;
+  questionList.innerHTML = "";
+
+  if (level && verb && data[level] && data[level][verb]) {
+    data[level][verb].forEach(question => {
+      const li = document.createElement("li");
+
+      const questionText = document.createElement("span");
+      questionText.textContent = question;
+
+      const copyBtn = document.createElement("button");
+      copyBtn.textContent = "Copy";
+copyBtn.className = "copy-btn";
+      copyBtn.style.marginLeft = "10px";
+
+      copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(question).then(() => {
+          copyFeedback.textContent = "Copied!";
+          setTimeout(() => (copyFeedback.textContent = ""), 2000);
+        });
+      });
+
+      li.appendChild(questionText);
+      li.appendChild(copyBtn);
+      questionList.appendChild(li);
+    });
+  } else {
+    alert("Please select both a Bloom’s level and a verb.");
+  }
+});
+
+</script>
+</body>
+</html>
