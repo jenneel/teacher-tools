@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Name Picker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      background: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .back-button {
+      display: inline-block;
+      margin-bottom: 1rem;
+      text-decoration: underline;
+      color: #333;
+      font-size: 1rem;
+    }
+    textarea, button {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    #result {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+🏠︎ <a href="index.html" class="back-button">Back to Home</a>
+    <h1>Random Name Picker</h1>
+
+    <label for="names">Enter names (one per line):</label>
+    <textarea id="names" rows="10" placeholder="Type names here..."></textarea>
+
+    <button onclick="pickRandomName()">Pick a Random Name</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function pickRandomName() {
+      const textarea = document.getElementById('names');
+      const resultDiv = document.getElementById('result');
+
+      let names = textarea.value
+        .split('\n')
+        .map(name => name.trim())
+        .filter(name => name !== '');
+
+      if (names.length === 0) {
+        resultDiv.textContent = 'All names have been picked!';
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * names.length);
+      const chosenName = names[randomIndex];
+
+      // Remove the chosen name from the list
+      names.splice(randomIndex, 1);
+      textarea.value = names.join('\n');
+
+      resultDiv.textContent = `🎉 The chosen name is: ${chosenName}`;
+    }
+  </script>
+
+</body>
+</html>
