@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Speech-to-Text Note Taker</title>
+  <style>
+    body {
+      font-family: Roboto, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 250px;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 20px;
+      font-weight: bold;
+      margin-right: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 15px;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    .controls {
+      margin-top: 15px;
+    }
+    .status {
+      margin-top: 10px;
+      font-style: italic;
+      color: #555;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 25px;
+      color: #007acc;
+      text-decoration: underline;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  🏠︎ <a href="index.html" class="back-link">Back to Home</a>
+  <h1>Speech-to-Text Note Taker</h1>
+  <textarea id="notes" placeholder="Start speaking and your words will appear here..."></textarea>
+
+  <div class="controls">
+    <button id="startStopBtn">Start Listening</button>
+    <button id="clearBtn">Clear Text</button>
+    <button id="copyBtn">Copy Text</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <script>
+    const notes = document.getElementById('notes');
+    const startStopBtn = document.getElementById('startStopBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const status = document.getElementById('status');
+
+    let recognition;
+    let listening = false;
+
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      status.textContent = 'Sorry, your browser does not support Speech Recognition.';
+      startStopBtn.disabled = true;
+    } else {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        listening = true;
+        status.textContent = 'Listening...';
+        startStopBtn.textContent = 'Stop Listening';
+      };
+
+      recognition.onend = () => {
+        listening = false;
+        status.textContent = 'Stopped listening.';
+        startStopBtn.textContent = 'Start Listening';
+      };
+
+      recognition.onerror = (event) => {
+        status.textContent = 'Error occurred: ' + event.error;
+      };
+
+      recognition.onresult = (event) => {
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            let transcript = event.results[i][0].transcript.trim();
+
+            // Capitalize first letter
+            transcript = transcript.charAt(0).toUpperCase() + transcript.slice(1);
+
+            // Add period if missing punctuation at end
+            if (!/[.?!]$/.test(transcript)) {
+              transcript += '.';
+            }
+
+            notes.value += (notes.value ? '\n' : '') + transcript;
+            notes.scrollTop = notes.scrollHeight;
+          }
+        }
+      };
+    }
+
+    startStopBtn.addEventListener('click', () => {
+      if (listening) {
+        recognition.stop();
+      } else {
+        recognition.start();
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      notes.value = '';
+      status.textContent = 'Text cleared.';
+    });
+
+    copyBtn.addEventListener('click', () => {
+      if (notes.value.trim()) {
+        navigator.clipboard.writeText(notes.value)
+          .then(() => {
+            status.textContent = 'Text copied to clipboard.';
+          })
+          .catch(() => {
+            status.textContent = 'Failed to copy text.';
+          });
+      } else {
+        status.textContent = 'Nothing to copy.';
+      }
+    });
+  </script>
+</body>
+</html>
