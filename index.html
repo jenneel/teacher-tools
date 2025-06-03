@@ -2,75 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Games</title>
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png" />
-
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
-
-  <!-- Meta Tags -->
-  <meta name="description" content="A collection of fun and interactive games for teachers and students, including Guessorix, Emojdle, and Guessix." />
-  <meta name="keywords" content="teacher tools, educational games, classroom activities, Guessorix, Emojdle, Guessix, online learning tools, student engagement" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teacher Toolbox</title>
   <style>
     body {
-      font-family: 'Roboto', sans-serif;
-      text-align: center;
-      padding: 50px 20px;
-      background-color: #f9f9f9;
+      font-family: Roboto, sans-serif;
+     background-color: #f9f9f9;
+      color: #333;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+     min-height: 100vh;
     }
 
     h1 {
-      font-size: 48px;
-      margin-bottom: 40px;
-      color: #333;
+      margin-bottom: 12px;
     }
 
-    .game-button {
-      display: block;
-      width: 300px;
-      margin: 20px auto;
-      padding: 20px;
-      font-size: 24px;
-      background-color: #007BFF;
-      color: white;
-      text-decoration: none;
-      border: none;
-      border-radius: 8px;
-      transition: background-color 0.3s;
+    ul {
+      list-style: none;
+      padding: 0;
+      width: auto;
+      text-align: center;
     }
 
-    .game-button:hover {
-      background-color: #0056b3;
+    li {
+      margin-bottom: 15px;
     }
 
-    .back-link {
-      font-size: 18px;
-      text-decoration: none;
-      color: #007BFF;
-      display: inline-block;
-      margin-bottom: 40px;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
+a {
+  display: inline-block;
+  text-decoration: none;
+  background: #007acc;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+  width: 250px;      /* fixed width for all buttons */
+  text-align: center; /* center the button text */
+}
+    a:hover {
+      background: #005fa3;
     }
   </style>
 </head>
 <body>
-
-  <div>
-    🏠︎ <a class="back-link" href="index.html">Back to Home</a>
-  </div>
-
-  <h1>Games</h1>
-
-  <a class="game-button" href="https://jenneel.github.io/guessorix/index.html" target="_blank">Guessorix</a>
-  <a class="game-button" href="https://jenneel.github.io/emojdle/index.html" target="_blank">Emojdle</a>
-  <a class="game-button" href="https://jenneel.github.io/guessix/index.html" target="_blank">Guessix</a>
-
+  <h1>Teacher Toolbox</h1>
+  <ul>
+    <li><a href="BloomsStemTool.html">Bloom's Question Stem Tool</a></li>
+    <li><a href="FeedbackTool.html">Feedback Sentence Stems</a></li>
+    <li><a href="Icebreaker.html">Icebreaker Generator</a></li>
+    <li><a href="ExitTicket.html">Exit Ticket Generator</a></li>
+    <li><a href="RandomNames.html">Random Name Picker</a></li>
+    <li><a href="TTS.html">Speech-to-Text Note Taker</a></li>
+    <li><a href="timer.html">Virtual Stopwatch</a></li>
+    <li><a href="CustomTimer.html">Countdown Timer</a></li>
+    <li><a href="MiniWhiteboard.html">Mini Doodle Space</a></li>
+    <li><a href="Quote.html">Daily Teacher Boost</a></li>
+  </ul>
 </body>
 </html>
