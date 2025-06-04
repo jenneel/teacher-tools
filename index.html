@@ -60,6 +60,48 @@ a {
     a:hover {
       background: #005fa3;
     }
+#credit {
+  background-color: #f9f9f9;
+  padding: 10px 20px;
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 0.9rem;
+  color: #555;
+  border-top: 1px solid #ddd;
+}
+
+#credit p {
+  margin: 0;
+}
+
+#credit p:last-child {
+  margin-top: 12px;  /* Space above Follow me */
+}
+
+#credit a {
+  background-color: #0077b6;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+}
+
+#credit a:hover,
+#credit a:focus {
+  background-color: #005f86;
+  color: white;
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
   </style>
 </head>
 <body>
@@ -78,5 +120,8 @@ a {
     <li><a href="games.html">Games</a></li>
 
   </ul>
+<footer id="credit">
+  <p>© 2025 <strong>Jenna Neel</strong> | Made with 💖 by a teacher powered by caffeine and curiosity.
+</footer>
 </body>
 </html>
